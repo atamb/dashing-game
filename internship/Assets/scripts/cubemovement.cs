@@ -13,6 +13,7 @@ public class cubemovement : MonoBehaviour
     public Vector3 lastPos;
     private float movespeed;
     public Animator animator;
+    public ParticleSystem explosion;
 
 
     // Update is called once per frame
@@ -49,6 +50,8 @@ public class cubemovement : MonoBehaviour
             transform.position += new Vector3(dif.x, 0f, 0f) * Time.deltaTime * movespeed;
         }
 
+        FallingGround();
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -58,6 +61,7 @@ public class cubemovement : MonoBehaviour
             case "obstacle":
                 speed = 0;
                 movespeed = 0;
+                explosion.Play();
                 StartCoroutine(falling());
                 break;
 
@@ -67,13 +71,32 @@ public class cubemovement : MonoBehaviour
         }
     }
 
+    private void FallingGround()
+    {
+        if (transform.position.y < 0)
+        {
+            StartCoroutine(fallingdown());
+        }
+    }
+
     IEnumerator falling()
     {
         animator.SetTrigger("fall");
         yield return new WaitForSeconds(2);
-        transform.position = new Vector3(0, 3, 0);
+        transform.position = new Vector3(0, 0.5f, 0);
         gm.score = 0;
         speed = 10;
         movespeed = 2;
+    }
+
+    IEnumerator fallingdown()
+    {
+        movespeed = 0;
+        animator.SetBool("fallingDown",true);
+        yield return new WaitForSeconds(1);
+        movespeed = 2;
+        animator.SetBool("fallingDown",false);
+        transform.position = new Vector3(0, 0.5f, 0);
+        gm.score = 0;
     }
 }
