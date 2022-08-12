@@ -1,2 +1,2 @@
 # dashing-game
-\t Designed dash-based game like subway surfers
+Designed dash-based game like subway surfers
