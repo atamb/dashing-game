@@ -13,7 +13,7 @@ public class cubemovement : MonoBehaviour
     public Vector3 lastPos;
     private float movespeed;
     public Animator animator;
-    public ParticleSystem explosion;
+
 
 
     // Update is called once per frame
@@ -61,7 +61,6 @@ public class cubemovement : MonoBehaviour
             case "obstacle":
                 speed = 0;
                 movespeed = 0;
-                explosion.Play();
                 StartCoroutine(falling());
                 break;
 
@@ -81,8 +80,9 @@ public class cubemovement : MonoBehaviour
 
     IEnumerator falling()
     {
-        animator.SetTrigger("fall");
+        animator.SetBool("hit", true);
         yield return new WaitForSeconds(2);
+        animator.SetBool("hit", false);
         transform.position = new Vector3(0, 0.5f, 0);
         gm.score = 0;
         speed = 10;
