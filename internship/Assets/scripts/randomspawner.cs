@@ -5,15 +5,47 @@ using UnityEngine;
 public class randomspawner : MonoBehaviour
 {
 
+    public gameManager gm;
     public GameObject[] prefabMaker;
     public float xPos;
     public float xPosObs;
     public float zPos;
     public int i;
+    public GameObject[] coins;
+    public GameObject[] obstacles;
+
     
 
     void Start()
     {
+        InstantiateObjects();
+    }
+
+    void Update()
+    {
+        coins = GameObject.FindGameObjectsWithTag("coin");
+        obstacles = GameObject.FindGameObjectsWithTag("obstacle");
+        if (gm.HitBool == true || gm.WinBool == true)
+        {
+            foreach (GameObject obstacle in obstacles)
+            {
+                obstacle.SetActive(false);
+            }
+            foreach (GameObject coins in coins)
+            {
+                coins.SetActive(false);
+            }
+            zPos = 0;
+            InstantiateObjects();
+            gm.WinBool = false;
+            gm.HitBool = false;
+
+        }
+    }
+
+    private void InstantiateObjects()
+    {
+        Random.InitState(gm.level);
         for (i = 0; i < 10; i++)
         {
             xPos = Random.Range(-1f, 2f);

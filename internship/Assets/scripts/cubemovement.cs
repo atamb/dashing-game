@@ -7,12 +7,20 @@ using UnityEngine.SceneManagement;
 public class cubemovement : MonoBehaviour
 {
 
+    public GameObject levelCompleted;
+    public GameObject Continue;
     public gameManager gm;
     private float speed;
     public Vector3 firstPos;
     public Vector3 lastPos;
     private float movespeed;
     public Animator animator;
+    public float minusLimit = -1.25f;
+    public float positiveLimit = 2.2f;
+    public ParticleSystem[] shield;
+    public ParticleSystem winParticle;
+    private bool over;
+
 
 
 
@@ -23,15 +31,47 @@ public class cubemovement : MonoBehaviour
         gm = GameObject.Find("gameManager").GetComponent<gameManager>();
         speed = 10;
         movespeed = 2;
+        over = false;
     }
 
     void FixedUpdate()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        verticalMovement();
     }
 
 
     void Update()
+    {
+        horizontalMovement();
+        restrictMovement();
+        shieldParticles();
+        screenChanging();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "obstacle":
+                StartCoroutine(falling());
+                break;
+
+            case "slower":
+                speed=8;
+                break;
+
+            case "finisher":
+                levelCompleted.SetActive(true);
+                animator.SetBool("win", true);
+                speed = 0;
+                movespeed = 0;
+                winParticle.Play();
+                Invoke("TapToContinue",1f);
+                break;
+        }
+    }
+
+    private void horizontalMovement()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -40,7 +80,7 @@ public class cubemovement : MonoBehaviour
             firstPos = Camera.main.ScreenToWorldPoint(pos);
 
         }
-       
+
         if (Input.GetMouseButton(0))
         {
             Vector3 pos = Input.mousePosition;
@@ -49,54 +89,85 @@ public class cubemovement : MonoBehaviour
             Vector3 dif = lastPos - firstPos;
             transform.position += new Vector3(dif.x, 0f, 0f) * Time.deltaTime * movespeed;
         }
-
-        FallingGround();
-
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void verticalMovement()
     {
-        switch (collision.gameObject.tag)
-        {
-            case "obstacle":
-                speed = 0;
-                movespeed = 0;
-                StartCoroutine(falling());
-                break;
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    }
 
-            case "finisher":
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                break;
+
+    public void restrictMovement()
+    {
+        if (transform.position.x > 2.2f)
+        {
+            transform.position = new Vector3(2.2f, transform.position.y, transform.position.z);
+        }
+
+        if (transform.position.x < -1.2f)
+        {
+            transform.position = new Vector3(-1.2f, transform.position.y, transform.position.z);
         }
     }
 
-    private void FallingGround()
+    private void shieldParticles()
     {
-        if (transform.position.y < 0)
+        if (gm.shieldScore == 1)
         {
-            StartCoroutine(fallingdown());
+            shield[0].Play();
+            shield[1].Play();
+        }
+
+        if (gm.shieldScore == 0)
+        {
+            shield[0].Stop();
+            shield[1].Stop();
         }
     }
+
+    private void TapToContinue()
+    {
+        Continue.SetActive(true);
+        over = true;
+    }
+
+    private void screenChanging()
+    {
+        if (over && Input.GetMouseButtonDown(0))
+        {
+            over = false;
+            gm.level += 1;
+            animator.SetBool("win", false);
+            gm.WinBool = true;
+            transform.position = new Vector3(0, 0.5f, 0);
+            gm.score = 0;
+            speed = 10;
+            movespeed = 2;
+            Continue.SetActive(false);
+            levelCompleted.SetActive(false);
+        }
+    }
+
 
     IEnumerator falling()
     {
-        animator.SetBool("hit", true);
-        yield return new WaitForSeconds(2);
-        animator.SetBool("hit", false);
-        transform.position = new Vector3(0, 0.5f, 0);
-        gm.score = 0;
-        speed = 10;
-        movespeed = 2;
+        if (gm.shieldScore==0)
+        {
+            speed = 0;
+            movespeed = 0;
+            animator.SetBool("hit", true);
+            yield return new WaitForSeconds(2);
+            gm.HitBool = true;
+            animator.SetBool("hit", false);
+            transform.position = new Vector3(0, 0.5f, 0);
+            gm.score = 0;
+            speed = 10;
+            movespeed = 2;
+        }
     }
 
-    IEnumerator fallingdown()
-    {
-        movespeed = 0;
-        animator.SetBool("fallingDown",true);
-        yield return new WaitForSeconds(1);
-        movespeed = 2;
-        animator.SetBool("fallingDown",false);
-        transform.position = new Vector3(0, 0.5f, 0);
-        gm.score = 0;
-    }
+   
+
+
+
 }
