@@ -9,6 +9,8 @@ TagManager:
   - finisher
   - slower
   - shield
+  - bullet
+  - enemy
   layers:
   - Default
   - TransparentFX

@@ -64,6 +64,10 @@ public class cubemovement : MonoBehaviour
                 StartCoroutine(falling());
                 break;
 
+            case "enemy":
+                StartCoroutine(falling());
+                break;
+
             case "slower":
                 speed=8;
                 break;

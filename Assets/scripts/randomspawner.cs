@@ -13,6 +13,9 @@ public class randomspawner : MonoBehaviour
     public int i;
     public GameObject[] coins;
     public GameObject[] obstacles;
+    public GameObject[] shields;
+    public GameObject[] bullets;
+    public GameObject[] enemies;
 
     
 
@@ -26,6 +29,10 @@ public class randomspawner : MonoBehaviour
     {
         coins = GameObject.FindGameObjectsWithTag("coin");
         obstacles = GameObject.FindGameObjectsWithTag("obstacle");
+        shields = GameObject.FindGameObjectsWithTag("shield");
+        bullets = GameObject.FindGameObjectsWithTag("bullet");
+        enemies = GameObject.FindGameObjectsWithTag("enemy");
+
         if (gm.HitBool == true || gm.WinBool == true)
         {
             foreach (GameObject obstacle in obstacles)
@@ -35,6 +42,18 @@ public class randomspawner : MonoBehaviour
             foreach (GameObject coins in coins)
             {
                 coins.SetActive(false);
+            }
+            foreach (GameObject shield in shields)
+            {
+                shield.SetActive(false);
+            }
+            foreach (GameObject bullet in bullets)
+            {
+                bullet.SetActive(false);
+            }
+            foreach (GameObject enemy in enemies)
+            {
+                enemy.SetActive(false);
             }
             zPos = 0;
             InstantiateObjects();
@@ -52,14 +71,22 @@ public class randomspawner : MonoBehaviour
             xPos = Random.Range(-1f, 2f);
             xPosObs = Random.Range(-0.25f, 1.85f);
             zPos += 10;
-            int index = Random.Range(0, prefabMaker.Length);
-            if (index == 0)
+            int index = Random.Range(0, 11);
+            if (index < 4)
             {
-                GameObject newCoin = Instantiate(prefabMaker[index], new Vector3(xPos, 0, zPos), Quaternion.identity);
+                GameObject newCoin = Instantiate(prefabMaker[0], new Vector3(xPos, 0, zPos), Quaternion.identity);
             }
-            else
+            else if (index < 8)
             {
-                GameObject obstacle = Instantiate(prefabMaker[index], new Vector3(xPosObs, 1, zPos), Quaternion.identity);
+                GameObject obstacle = Instantiate(prefabMaker[1], new Vector3(xPosObs, 1, zPos), Quaternion.identity);
+            }
+            else if (index < 9)
+            {
+                GameObject shield = Instantiate(prefabMaker[2], new Vector3(xPos, 0, zPos), Quaternion.identity);
+            }
+            else if(index<=11)
+            {
+                GameObject enemy = Instantiate(prefabMaker[3], new Vector3(xPos, 0, zPos), Quaternion.identity);
             }
 
 

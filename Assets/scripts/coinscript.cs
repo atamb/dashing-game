@@ -5,13 +5,19 @@ using UnityEngine;
 
 public class coinscript : MonoBehaviour
 {
-    public gameManager gm;
-    public ParticleSystem patlama;
-    public GameObject coinModel;
+    [SerializeField]
+    private gameManager gm;
+    [SerializeField]
+    private ParticleSystem patlama;
+    [SerializeField]
+    private GameObject coinModel;
+    [SerializeField]
+    private int gold;
 
     void Start()
     {
         gm = GameObject.Find("gameManager").GetComponent<gameManager>();
+        gold = PlayerPrefs.GetInt("goldSaved");
     }
 
     void Update()
@@ -30,6 +36,8 @@ public class coinscript : MonoBehaviour
             coinModel.SetActive(false);
             patlama.Play();
             gm.score += 1;
+            gold+=1;
+            PlayerPrefs.SetInt("goldSaved", gold);
         }
 
     }

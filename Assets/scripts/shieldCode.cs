@@ -14,17 +14,13 @@ public class shieldCode : MonoBehaviour
         gm=GameObject.Find("gameManager").GetComponent<gameManager>();
     }
 
-    void Update()
-    {
-
-    }
 
      private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
         {
             gm.shieldScore += 1;
-            shield.SetActive(false);
+            gameObject.SetActive(false);
             Invoke("resetScore", 2f);
         }
     }
@@ -32,6 +28,5 @@ public class shieldCode : MonoBehaviour
     private void resetScore()
     {
         gm.shieldScore = 0;
-        shield.SetActive(true);
     }
 }
