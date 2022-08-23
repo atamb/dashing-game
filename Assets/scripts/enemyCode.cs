@@ -6,10 +6,12 @@ public class enemyCode : MonoBehaviour
 {
 
     public Animator animator;
+    Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
         transform.rotation= Quaternion.Euler(0,180,0);
+        rb=GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -22,8 +24,9 @@ public class enemyCode : MonoBehaviour
     {
         if(collision.gameObject.tag=="bullet")
         {
+            rb.AddForce(0, 100, 500);
             animator.SetBool("shot",true);
-            Invoke("Destroy",1f);
+            Invoke("Destroy",2f);
         }
     }
 

@@ -28,6 +28,8 @@ public class cubemovement : MonoBehaviour
     public GameObject finish3;
     private float zfinish1,zfinish2,zfinish3;
     public GameObject destroyingshield;
+    [SerializeField]
+    public GameObject gun;
 
 
 
@@ -73,6 +75,7 @@ public class cubemovement : MonoBehaviour
                 break;
 
             case "finisher":
+                gun.SetActive(false);
                 levelCompleted.SetActive(true);
                 animator.SetBool("win", true);
                 speed = 0;
@@ -147,6 +150,7 @@ public class cubemovement : MonoBehaviour
     {
         if (over && Input.GetMouseButtonDown(0))
         {
+            gun.SetActive(true);
             over = false;
             gm.level += 1;
             animator.SetBool("win", false);
@@ -190,6 +194,7 @@ public class cubemovement : MonoBehaviour
     {
         if (gm.shieldScore==0)
         {
+            gun.SetActive(false);
             speed = 0;
             movespeed = 0;
             animator.SetBool("hit", true);
@@ -197,6 +202,7 @@ public class cubemovement : MonoBehaviour
             gm.HitBool = true;
             animator.SetBool("hit", false);
             transform.position = new Vector3(0, 0.5f, 0);
+            gun.SetActive(true);
             gm.score = 0;
             speed = 10;
             movespeed = 2;
