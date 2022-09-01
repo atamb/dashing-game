@@ -21,7 +21,6 @@ public class coinscript : MonoBehaviour
     void Start()
     {
         gm = GameObject.Find("gameManager").GetComponent<gameManager>();
-        coinSound=GameObject.Find("coinSound").GetComponent<AudioSource>();
     }
 
     void Update()

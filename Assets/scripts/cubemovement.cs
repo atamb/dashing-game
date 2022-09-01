@@ -9,7 +9,7 @@ public class cubemovement : MonoBehaviour
     
     private float lastFrameFingerPositionX;
     private float moveFactorX;
-    [SerializeField] private float movespeed=0.5f;
+    [SerializeField] private float movespeed=0.01f;
     public GameObject levelCompleted;
     public GameObject Continue;
     public gameManager gm;

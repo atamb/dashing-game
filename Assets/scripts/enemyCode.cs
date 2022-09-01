@@ -11,11 +11,11 @@ public class enemyCode : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject health;
     [SerializeField] private GameObject healthBar;
+    [SerializeField] private GameObject enemyGun;
     [SerializeField] private AudioSource shootSound;
 
     void Start()
     {
-        shootSound=GameObject.Find("shootSound").GetComponent<AudioSource>();
         Transform health = transform.Find("health");
         transform.rotation= Quaternion.Euler(0,180,0);
         rb=GetComponent<Rigidbody>();
@@ -46,6 +46,7 @@ public class enemyCode : MonoBehaviour
         {
             animator.SetBool("shot",true);
             health.SetActive(false);
+            enemyGun.SetActive(false);
             Invoke("Destroy",1f);
             shooted=0;
             gameObject.GetComponent<BoxCollider>().enabled = false;
