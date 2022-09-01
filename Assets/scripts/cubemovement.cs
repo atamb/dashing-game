@@ -7,17 +7,18 @@ using UnityEngine.SceneManagement;
 public class cubemovement : MonoBehaviour
 {
     
+    private float lastFrameFingerPositionX;
+    private float moveFactorX;
+    [SerializeField] private float movespeed=0.5f;
     public GameObject levelCompleted;
     public GameObject Continue;
     public gameManager gm;
     private float speed;
-    public Vector3 firstPos;
-    public Vector3 lastPos;
-    private float movespeed;
     public Animator animator;
     public float minusLimit = -1.25f;
     public float positiveLimit = 2.2f;
     public ParticleSystem[] shield;
+    [SerializeField] private float ShieldResetTime;
     public ParticleSystem winParticle;
     private bool over;
     public GameObject road;
@@ -26,10 +27,11 @@ public class cubemovement : MonoBehaviour
     public GameObject finish1;
     public GameObject finish2;
     public GameObject finish3;
-    private float zfinish1,zfinish2,zfinish3;
-    public GameObject destroyingshield;
+    public GameObject finish4;
+    private float zfinish1,zfinish2,zfinish3, zfinish4;
     [SerializeField]
     public GameObject gun;
+    [SerializeField] private AudioSource crushTheWall;
 
 
 
@@ -39,7 +41,6 @@ public class cubemovement : MonoBehaviour
     {
         gm = GameObject.Find("gameManager").GetComponent<gameManager>();
         speed = 10;
-        movespeed = 2;
         over = false;
         startpositions();
     }
@@ -48,7 +49,6 @@ public class cubemovement : MonoBehaviour
     {
         verticalMovement();
     }
-
 
     void Update()
     {
@@ -75,6 +75,7 @@ public class cubemovement : MonoBehaviour
                 break;
 
             case "finisher":
+                gm.shootCanceling = true;
                 gun.SetActive(false);
                 levelCompleted.SetActive(true);
                 animator.SetBool("win", true);
@@ -83,27 +84,34 @@ public class cubemovement : MonoBehaviour
                 winParticle.Play();
                 Invoke("TapToContinue",1f);
                 break;
+
+            case "shield":
+                ShieldResetTime=2;
+                gm.shieldScore += 1;
+                Invoke("resetShieldScore", ShieldResetTime);
+                break;
         }
     }
 
     private void horizontalMovement()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0))
         {
-            Vector3 pos = Input.mousePosition;
-            pos.z = 10;
-            firstPos = Camera.main.ScreenToWorldPoint(pos);
-
+            lastFrameFingerPositionX = Input.mousePosition.x;
         }
 
-        if (Input.GetMouseButton(0))
+        else if(Input.GetMouseButton(0))
         {
-            Vector3 pos = Input.mousePosition;
-            pos.z = 10;
-            lastPos = Camera.main.ScreenToWorldPoint(pos);
-            Vector3 dif = lastPos - firstPos;
-            transform.position += new Vector3(dif.x, 0f, 0f) * Time.deltaTime * movespeed;
+            moveFactorX = Input.mousePosition.x - lastFrameFingerPositionX;
+            lastFrameFingerPositionX = Input.mousePosition.x;
         }
+
+        else if(Input.GetMouseButtonUp(0))
+        {
+            moveFactorX = 0f;
+        }
+        float swerveAmount = Time.deltaTime * movespeed * moveFactorX;
+        transform.Translate(swerveAmount,0,0);
     }
 
     private void verticalMovement()
@@ -140,6 +148,11 @@ public class cubemovement : MonoBehaviour
         }
     }
 
+    private void resetShieldScore()
+    {
+        gm.shieldScore = 0;
+    }
+
     private void TapToContinue()
     {
         Continue.SetActive(true);
@@ -156,6 +169,7 @@ public class cubemovement : MonoBehaviour
             animator.SetBool("win", false);
             gm.WinBool = true;
             transform.position = new Vector3(0, 0.5f, 0);
+            gm.shootCanceling = false;
             gm.score = 0;
             speed = 10;
             movespeed = 2;
@@ -173,11 +187,13 @@ public class cubemovement : MonoBehaviour
             zfinish1+=10f;
             zfinish2+=10f;
             zfinish3+=10f;
+            zfinish4+=10f;
             road.transform.localScale=new Vector3(4.11f,transform.localScale.y,zMagnitude);
             road.transform.position= new Vector3(0.7f,0,zPosition);
             finish1.transform.position= new Vector3(finish1.transform.position.x,finish1.transform.position.y,zfinish1);
             finish2.transform.position= new Vector3(finish2.transform.position.x,finish2.transform.position.y,zfinish2);
             finish3.transform.position= new Vector3(finish3.transform.position.x,finish3.transform.position.y,zfinish3);
+            finish4.transform.position= new Vector3(finish4.transform.position.x,finish4.transform.position.y,zfinish4);
     }
 
     private void startpositions()
@@ -187,6 +203,7 @@ public class cubemovement : MonoBehaviour
             zfinish1=103.0889f;
             zfinish2=107.6725f;
             zfinish3=101.5655f;
+            zfinish4=130;
     }
 
 
@@ -194,15 +211,18 @@ public class cubemovement : MonoBehaviour
     {
         if (gm.shieldScore==0)
         {
+            crushTheWall.Play();
             gun.SetActive(false);
             speed = 0;
             movespeed = 0;
             animator.SetBool("hit", true);
+            gm.shootCanceling=true;
             yield return new WaitForSeconds(2);
             gm.HitBool = true;
             animator.SetBool("hit", false);
             transform.position = new Vector3(0, 0.5f, 0);
             gun.SetActive(true);
+            gm.shootCanceling=false;
             gm.score = 0;
             speed = 10;
             movespeed = 2;

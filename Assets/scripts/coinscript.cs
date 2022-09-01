@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
 
 
 public class coinscript : MonoBehaviour
@@ -12,12 +14,14 @@ public class coinscript : MonoBehaviour
     [SerializeField]
     private GameObject coinModel;
     [SerializeField]
-    private int gold;
+    private AudioSource coinSound;
+
+
 
     void Start()
     {
         gm = GameObject.Find("gameManager").GetComponent<gameManager>();
-        gold = PlayerPrefs.GetInt("goldSaved");
+        coinSound=GameObject.Find("coinSound").GetComponent<AudioSource>();
     }
 
     void Update()
@@ -36,8 +40,9 @@ public class coinscript : MonoBehaviour
             coinModel.SetActive(false);
             patlama.Play();
             gm.score += 1;
-            gold+=1;
-            PlayerPrefs.SetInt("goldSaved", gold);
+            coinSound.Play();
+            gm.gold++;
+            gm.goldText.text = "= " + gm.gold.ToString();
         }
 
     }

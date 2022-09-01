@@ -86,7 +86,7 @@ public class randomspawner : MonoBehaviour
             }
             else if(index<=11)
             {
-                GameObject enemy = Instantiate(prefabMaker[3], new Vector3(xPos, 0, zPos), Quaternion.identity);
+                GameObject enemy = Instantiate(prefabMaker[3], new Vector3(xPos, 0.5f, zPos), Quaternion.identity);
             }
 
 
