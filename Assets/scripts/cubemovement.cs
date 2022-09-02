@@ -9,7 +9,7 @@ public class cubemovement : MonoBehaviour
     
     private float lastFrameFingerPositionX;
     private float moveFactorX;
-    [SerializeField] private float movespeed=0.01f;
+    [SerializeField] private float movespeed=0.1f;
     public GameObject levelCompleted;
     public GameObject Continue;
     public gameManager gm;
@@ -102,7 +102,7 @@ public class cubemovement : MonoBehaviour
 
         else if(Input.GetMouseButton(0))
         {
-            moveFactorX = Input.mousePosition.x - lastFrameFingerPositionX;
+            moveFactorX = (Input.mousePosition.x - lastFrameFingerPositionX)/5;
             lastFrameFingerPositionX = Input.mousePosition.x;
         }
 
