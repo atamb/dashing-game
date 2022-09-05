@@ -36,7 +36,11 @@ public class enemyCode : MonoBehaviour
 
         if(collision.gameObject.tag=="obstacle")
         {
+            animator.SetBool("shot",true);
+            Invoke("Destroy",1f);
             gm.gold+=5;
+            gm.goldText.text = "= " + gm.gold.ToString();
+            gameObject.GetComponent<BoxCollider>().enabled = false;
         }
     }
 

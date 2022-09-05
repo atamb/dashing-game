@@ -16,9 +16,11 @@ public class gameManager : MonoBehaviour
     public int level;
     public float objectcount;
     public Text goldText;
+    public float bulletFrequency;
 
     void Start()
     {
+        bulletFrequency=0.7f;
         level = 1;
         score = 0;
         shieldScore = 0;

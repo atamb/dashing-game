@@ -29,8 +29,8 @@ public class cubemovement : MonoBehaviour
     public GameObject finish3;
     public GameObject finish4;
     private float zfinish1,zfinish2,zfinish3, zfinish4;
-    [SerializeField]
-    public GameObject gun;
+    [SerializeField] private GameObject gun;
+    [SerializeField] private GameObject goldscene;
     [SerializeField] private AudioSource crushTheWall;
 
 
@@ -55,6 +55,7 @@ public class cubemovement : MonoBehaviour
         horizontalMovement();
         restrictMovement();
         shieldParticles();
+        increaseBulletFrequency();
         screenChanging();
     }
 
@@ -102,7 +103,7 @@ public class cubemovement : MonoBehaviour
 
         else if(Input.GetMouseButton(0))
         {
-            moveFactorX = (Input.mousePosition.x - lastFrameFingerPositionX)/5;
+            moveFactorX = (Input.mousePosition.x - lastFrameFingerPositionX)/15;
             lastFrameFingerPositionX = Input.mousePosition.x;
         }
 
@@ -157,6 +158,14 @@ public class cubemovement : MonoBehaviour
     {
         Continue.SetActive(true);
         over = true;
+    }
+
+    private void increaseBulletFrequency()
+    {
+        if(over && gm.gold>=50)
+        {
+            goldscene.SetActive(true);
+        }
     }
 
     private void screenChanging()
