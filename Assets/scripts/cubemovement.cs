@@ -87,7 +87,7 @@ public class cubemovement : MonoBehaviour
                 break;
 
             case "shield":
-                ShieldResetTime=2;
+                ShieldResetTime += 2;
                 gm.shieldScore += 1;
                 Invoke("resetShieldScore", ShieldResetTime);
                 break;

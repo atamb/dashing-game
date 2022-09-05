@@ -15,6 +15,7 @@ public class goldSceneCode : MonoBehaviour
         gm.gold-=50;
         gm.bulletFrequency-=0.1f;
         goldScene.SetActive(false);
+        gm.goldText.text = "= " + gm.gold.ToString();
     }
     public void no()
     {
