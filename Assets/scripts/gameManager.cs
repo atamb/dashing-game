@@ -13,6 +13,7 @@ public class gameManager : MonoBehaviour
     public bool HitBool;
     public bool WinBool;
     public bool shootCanceling;
+    public bool goldSceneOpen;
     public int level;
     public float objectcount;
     public Text goldText;

@@ -71,20 +71,20 @@ public class randomspawner : MonoBehaviour
             xPos = Random.Range(-1f, 2f);
             xPosObs = Random.Range(-0.25f, 1.85f);
             zPos += 10;
-            int index = Random.Range(0, 11);
-            if (index < 4)
+            int index = Random.Range(0, 35);
+            if (index < 14)
             {
                 GameObject newCoin = Instantiate(prefabMaker[0], new Vector3(xPos, 0, zPos), Quaternion.identity);
             }
-            else if (index < 8)
+            else if (index < 28)
             {
                 GameObject obstacle = Instantiate(prefabMaker[1], new Vector3(xPosObs, 1, zPos), Quaternion.identity);
             }
-            else if (index < 9)
+            else if (index < 29)
             {
                 GameObject shield = Instantiate(prefabMaker[2], new Vector3(xPos, 0, zPos), Quaternion.identity);
             }
-            else if(index<=11)
+            else if(index<=35)
             {
                 GameObject enemy = Instantiate(prefabMaker[3], new Vector3(xPos, 0.5f, zPos), Quaternion.identity);
             }

@@ -12,16 +12,14 @@ public class ShootScript : MonoBehaviour
     private float bulletVelocity;
     [SerializeField]
     private Transform bulletPosition;
+    [SerializeField]
+    private float lastTime;
 
     // Start is called before the first frame update
     void Start()
     {
         gm=GameObject.Find("gameManager").GetComponent<gameManager>();
-        
-        if(!gm.shootCanceling)
-        {
-          InvokeRepeating("shoot", 0.5f, 0.7f);
-        }
+        //Repeating();
     }
 
     void Update()
@@ -36,10 +34,27 @@ public class ShootScript : MonoBehaviour
         }
     }
 
+    private void FixedUpdate() {
+        if(Time.time-lastTime>gm.bulletFrequency)
+        {
+            shoot();
+            lastTime = Time.time;
+        }
+
+    }
+
+    private void Repeating()
+    {
+        if(!gm.shootCanceling)
+        {
+          InvokeRepeating("shoot", 0.5f, gm.bulletFrequency);
+        }
+    }
+
 
     public void shoot()
     {
         GameObject bulletSpawn = Instantiate(bullet, bulletPosition.position, bulletPosition.rotation);
-        bulletSpawn.GetComponent<Rigidbody>().velocity = new Vector3 (0f, 0f, bulletVelocity*Time.deltaTime);
+        bulletSpawn.GetComponent<Rigidbody>().velocity = new Vector3 (0f, 0f, bulletVelocity*Time.fixedDeltaTime);
     }
 }

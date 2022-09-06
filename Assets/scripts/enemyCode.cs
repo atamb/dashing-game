@@ -11,7 +11,6 @@ public class enemyCode : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject health;
     [SerializeField] private GameObject healthBar;
-    [SerializeField] private GameObject enemyGun;
     [SerializeField] private AudioSource shootSound;
 
     void Start()
@@ -23,9 +22,9 @@ public class enemyCode : MonoBehaviour
     }
 
 
-     private void OnCollisionEnter(Collision collision) 
+     private void OnCollisionEnter(Collision other) 
     {
-        if(collision.gameObject.tag=="bullet" && shooted<3)
+        if(other.gameObject.tag=="bullet" && shooted<3)
         {
             shooted+=1;
             health.transform.localScale =new Vector3(health.transform.localScale.x-0.4f,health.transform.localScale.y,health.transform.localScale.z);
@@ -34,26 +33,30 @@ public class enemyCode : MonoBehaviour
             healthBar.SetActive(true);           
         }
 
-        if(collision.gameObject.tag=="obstacle")
+        if(other.gameObject.tag=="obstacle")
         {
+            gameObject.GetComponent<BoxCollider>().enabled = false;
             animator.SetBool("shot",true);
             Invoke("Destroy",1f);
             gm.gold+=5;
             gm.goldText.text = "= " + gm.gold.ToString();
-            gameObject.GetComponent<BoxCollider>().enabled = false;
+        }
+        
+        if(other.gameObject.tag=="Player")
+        {
+            animator.SetBool("swordHit",true);
         }
     }
 
-    private void Update() 
+    private void FixedUpdate() 
     {
         if(shooted==3)
         {
+            gameObject.GetComponent<BoxCollider>().enabled = false;
             animator.SetBool("shot",true);
             health.SetActive(false);
-            enemyGun.SetActive(false);
             Invoke("Destroy",1f);
             shooted=0;
-            gameObject.GetComponent<BoxCollider>().enabled = false;
             gm.gold+=2;
             gm.goldText.text = "= " + gm.gold.ToString();
         }

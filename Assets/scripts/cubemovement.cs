@@ -9,7 +9,7 @@ public class cubemovement : MonoBehaviour
     
     private float lastFrameFingerPositionX;
     private float moveFactorX;
-    [SerializeField] private float movespeed=0.1f;
+    [SerializeField] private float movespeed=60;
     public GameObject levelCompleted;
     public GameObject Continue;
     public gameManager gm;
@@ -32,6 +32,7 @@ public class cubemovement : MonoBehaviour
     [SerializeField] private GameObject gun;
     [SerializeField] private GameObject goldscene;
     [SerializeField] private AudioSource crushTheWall;
+    [SerializeField] private AudioSource winSound;
 
 
 
@@ -82,6 +83,7 @@ public class cubemovement : MonoBehaviour
                 animator.SetBool("win", true);
                 speed = 0;
                 movespeed = 0;
+                winSound.Play();
                 winParticle.Play();
                 Invoke("TapToContinue",1f);
                 break;
@@ -111,7 +113,7 @@ public class cubemovement : MonoBehaviour
         {
             moveFactorX = 0f;
         }
-        float swerveAmount = Time.deltaTime * movespeed * moveFactorX;
+        float swerveAmount = Time.fixedDeltaTime * movespeed * moveFactorX;
         transform.Translate(swerveAmount,0,0);
     }
 
@@ -165,12 +167,13 @@ public class cubemovement : MonoBehaviour
         if(over && gm.gold>=50)
         {
             goldscene.SetActive(true);
+            gm.goldSceneOpen=true;
         }
     }
 
     private void screenChanging()
     {
-        if (over && Input.GetMouseButtonDown(0))
+        if (over && !gm.goldSceneOpen && Input.GetMouseButtonDown(0))
         {
             gun.SetActive(true);
             over = false;
