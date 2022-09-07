@@ -20,20 +20,18 @@ public class cubemovement : MonoBehaviour
     public ParticleSystem[] shield;
     [SerializeField] private float ShieldResetTime;
     public ParticleSystem winParticle;
-    private bool over;
+    [SerializeField] private bool over;
     public GameObject road;
     public float zMagnitude;
     public float zPosition;
     public GameObject finish1;
     public GameObject finish2;
     public GameObject finish3;
-    public GameObject finish4;
-    private float zfinish1,zfinish2,zfinish3, zfinish4;
-    [SerializeField] private GameObject gun;
-    [SerializeField] private GameObject goldscene;
+    private float zfinish1,zfinish2,zfinish3;
+    [SerializeField] private GameObject[] guns;
+    [SerializeField] private GameObject[] goldScene;
     [SerializeField] private AudioSource crushTheWall;
     [SerializeField] private AudioSource winSound;
-
 
 
     // Update is called once per frame
@@ -78,7 +76,7 @@ public class cubemovement : MonoBehaviour
 
             case "finisher":
                 gm.shootCanceling = true;
-                gun.SetActive(false);
+                guns[gm.gunIndex].SetActive(false);
                 levelCompleted.SetActive(true);
                 animator.SetBool("win", true);
                 speed = 0;
@@ -154,6 +152,7 @@ public class cubemovement : MonoBehaviour
     private void resetShieldScore()
     {
         gm.shieldScore = 0;
+        ShieldResetTime = 0;
     }
 
     private void TapToContinue()
@@ -164,18 +163,25 @@ public class cubemovement : MonoBehaviour
 
     private void increaseBulletFrequency()
     {
-        if(over && gm.gold>=50)
+        if(over && gm.gold>=50 && gm.bulletFrequency>0.4 && gm.gunIndex==0)
         {
-            goldscene.SetActive(true);
+            goldScene[0].SetActive(true);
             gm.goldSceneOpen=true;
         }
+
+        if((over) && (gm.gold>=100) && !(gm.bulletFrequency>0.4) && (gm.gunIndex == 0))
+        {
+            goldScene[1].SetActive(true);
+            gm.goldSceneOpen = true;
+        }
+        
     }
 
     private void screenChanging()
     {
         if (over && !gm.goldSceneOpen && Input.GetMouseButtonDown(0))
         {
-            gun.SetActive(true);
+            guns[gm.gunIndex].SetActive(true);
             over = false;
             gm.level += 1;
             animator.SetBool("win", false);
@@ -199,13 +205,11 @@ public class cubemovement : MonoBehaviour
             zfinish1+=10f;
             zfinish2+=10f;
             zfinish3+=10f;
-            zfinish4+=10f;
             road.transform.localScale=new Vector3(4.11f,transform.localScale.y,zMagnitude);
             road.transform.position= new Vector3(0.7f,0,zPosition);
             finish1.transform.position= new Vector3(finish1.transform.position.x,finish1.transform.position.y,zfinish1);
             finish2.transform.position= new Vector3(finish2.transform.position.x,finish2.transform.position.y,zfinish2);
             finish3.transform.position= new Vector3(finish3.transform.position.x,finish3.transform.position.y,zfinish3);
-            finish4.transform.position= new Vector3(finish4.transform.position.x,finish4.transform.position.y,zfinish4);
     }
 
     private void startpositions()
@@ -215,7 +219,6 @@ public class cubemovement : MonoBehaviour
             zfinish1=103.0889f;
             zfinish2=107.6725f;
             zfinish3=101.5655f;
-            zfinish4=130;
     }
 
 
@@ -224,7 +227,6 @@ public class cubemovement : MonoBehaviour
         if (gm.shieldScore==0)
         {
             crushTheWall.Play();
-            gun.SetActive(false);
             speed = 0;
             movespeed = 0;
             animator.SetBool("hit", true);
@@ -233,7 +235,6 @@ public class cubemovement : MonoBehaviour
             gm.HitBool = true;
             animator.SetBool("hit", false);
             transform.position = new Vector3(0, 0.5f, 0);
-            gun.SetActive(true);
             gm.shootCanceling=false;
             gm.score = 0;
             speed = 10;

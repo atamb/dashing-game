@@ -19,7 +19,6 @@ public class ShootScript : MonoBehaviour
     void Start()
     {
         gm=GameObject.Find("gameManager").GetComponent<gameManager>();
-        //Repeating();
     }
 
     void Update()
@@ -43,18 +42,11 @@ public class ShootScript : MonoBehaviour
 
     }
 
-    private void Repeating()
-    {
-        if(!gm.shootCanceling)
-        {
-          InvokeRepeating("shoot", 0.5f, gm.bulletFrequency);
-        }
-    }
-
-
     public void shoot()
     {
         GameObject bulletSpawn = Instantiate(bullet, bulletPosition.position, bulletPosition.rotation);
         bulletSpawn.GetComponent<Rigidbody>().velocity = new Vector3 (0f, 0f, bulletVelocity*Time.fixedDeltaTime);
     }
+
+
 }

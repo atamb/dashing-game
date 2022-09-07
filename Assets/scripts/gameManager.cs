@@ -18,12 +18,15 @@ public class gameManager : MonoBehaviour
     public float objectcount;
     public Text goldText;
     public float bulletFrequency;
+    public int gunIndex;
+    [SerializeField] private GameObject pistol;
 
     void Start()
     {
         bulletFrequency=0.7f;
         level = 1;
         score = 0;
+        gunIndex = 0;
         shieldScore = 0;
         HitBool = false;
         WinBool = false;
@@ -33,9 +36,9 @@ public class gameManager : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(gunIndex == 1)
         {
-            SceneManager.LoadScene(0);
+            pistol.SetActive(false);
         }
     }
 
