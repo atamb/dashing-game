@@ -37,23 +37,23 @@ public class randomspawner : MonoBehaviour
         {
             foreach (GameObject obstacle in obstacles)
             {
-                obstacle.SetActive(false);
+                Destroy(obstacle);
             }
             foreach (GameObject coins in coins)
             {
-                coins.SetActive(false);
+                Destroy(coins);
             }
             foreach (GameObject shield in shields)
             {
-                shield.SetActive(false);
+                Destroy(shield);
             }
             foreach (GameObject bullet in bullets)
             {
-                bullet.SetActive(false);
+                Destroy(bullet);
             }
             foreach (GameObject enemy in enemies)
             {
-                enemy.SetActive(false);
+                Destroy(enemy);
             }
             zPos = 0;
             InstantiateObjects();

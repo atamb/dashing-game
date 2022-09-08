@@ -40,7 +40,7 @@ public class coinscript : MonoBehaviour
             patlama.Play();
             gm.score += 1;
             coinSound.Play();
-            gm.gold++;
+            gm.gold += gm.doublecoin;
             gm.goldText.text = "= " + gm.gold.ToString();
         }
 

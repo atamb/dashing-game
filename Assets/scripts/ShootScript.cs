@@ -21,20 +21,8 @@ public class ShootScript : MonoBehaviour
         gm=GameObject.Find("gameManager").GetComponent<gameManager>();
     }
 
-    void Update()
-    {
-        if(gm.shootCanceling)
-        {
-            bullet.SetActive(false);
-        }
-        else
-        {
-            bullet.SetActive(true);
-        }
-    }
-
     private void FixedUpdate() {
-        if(Time.time-lastTime>gm.bulletFrequency)
+        if((Time.time-lastTime>gm.bulletFrequency)&&!(gm.shootCanceling))
         {
             shoot();
             lastTime = Time.time;

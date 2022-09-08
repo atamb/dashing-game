@@ -76,6 +76,7 @@ public class cubemovement : MonoBehaviour
 
             case "finisher":
                 gm.shootCanceling = true;
+                gm.shieldScore=0;
                 guns[gm.gunIndex].SetActive(false);
                 levelCompleted.SetActive(true);
                 animator.SetBool("win", true);
@@ -169,10 +170,41 @@ public class cubemovement : MonoBehaviour
             gm.goldSceneOpen=true;
         }
 
-        if((over) && (gm.gold>=100) && !(gm.bulletFrequency>0.4) && (gm.gunIndex == 0))
+        else if((over) && (gm.gold>=100) && !(gm.bulletFrequency>0.4) && (gm.gunIndex == 0))
         {
             goldScene[1].SetActive(true);
             gm.goldSceneOpen = true;
+        }
+
+        else if(over && gm.gold>=75 && gm.bulletFrequency>0.4 && gm.gunIndex==1)
+        {
+            goldScene[2].SetActive(true);
+            gm.goldSceneOpen=true;
+        }
+        else if((over) && (gm.gold>=200) && !(gm.bulletFrequency>0.4) && (gm.gunIndex == 1))
+        {
+            goldScene[3].SetActive(true);
+            gm.goldSceneOpen = true;
+        }
+        else if(over && gm.gold>=125 && gm.bulletFrequency>0.3 && gm.gunIndex==2)
+        {
+            goldScene[4].SetActive(true);
+            gm.goldSceneOpen=true;
+        }
+        else if((over) && (gm.gold>=350) && !(gm.bulletFrequency>0.3) && (gm.gunIndex == 2))
+        {
+            goldScene[5].SetActive(true);
+            gm.goldSceneOpen=true;
+        }
+        else if(over && gm.gold>=200 && gm.bulletFrequency>0.3 && gm.gunIndex==3)
+        {
+            goldScene[6].SetActive(true);
+            gm.goldSceneOpen=true;
+        }
+        else if((over) && (gm.gold>=750) && !(gm.bulletFrequency>0.3) && (gm.gunIndex == 3))
+        {
+            goldScene[7].SetActive(true);
+            gm.goldSceneOpen=true;
         }
         
     }
@@ -190,7 +222,7 @@ public class cubemovement : MonoBehaviour
             gm.shootCanceling = false;
             gm.score = 0;
             speed = 10;
-            movespeed = 2;
+            movespeed = 10;
             Continue.SetActive(false);
             levelCompleted.SetActive(false);
             gm.objectcount += 1;
@@ -238,7 +270,7 @@ public class cubemovement : MonoBehaviour
             gm.shootCanceling=false;
             gm.score = 0;
             speed = 10;
-            movespeed = 2;
+            movespeed = 10;
         }
     }
 

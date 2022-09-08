@@ -19,10 +19,12 @@ public class gameManager : MonoBehaviour
     public Text goldText;
     public float bulletFrequency;
     public int gunIndex;
+    public int doublecoin;
     [SerializeField] private GameObject pistol;
 
     void Start()
     {
+        doublecoin=1;
         bulletFrequency=0.7f;
         level = 1;
         score = 0;
