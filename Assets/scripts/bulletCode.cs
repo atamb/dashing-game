@@ -18,7 +18,7 @@ public class bulletCode : MonoBehaviour
     {
         if(other.gameObject.tag=="enemy")
         {
-            gameObject.SetActive(false);
+            Destroy(this.gameObject);
         }
     }
 }
