@@ -50,6 +50,10 @@ public class enemyCode : MonoBehaviour
                 case 3:
                 health.transform.localScale =new Vector3(health.transform.localScale.x-0.5f,health.transform.localScale.y,health.transform.localScale.z);    
                 break;
+
+                case 4:
+                health.transform.localScale =new Vector3(health.transform.localScale.x-1,health.transform.localScale.y,health.transform.localScale.z);    
+                break;
             }
         }
 
@@ -93,6 +97,17 @@ public class enemyCode : MonoBehaviour
         }
 
         if(shooted==2 && gm.gunIndex==3)
+        {
+            gameObject.GetComponent<BoxCollider>().enabled = false;
+            animator.SetBool("shot",true);
+            health.SetActive(false);
+            Invoke("Destroy",1f);
+            shooted=0;
+            gm.gold+=2;
+            gm.goldText.text = "= " + gm.gold.ToString();
+        }
+
+        if(shooted==1 && gm.gunIndex==4)
         {
             gameObject.GetComponent<BoxCollider>().enabled = false;
             animator.SetBool("shot",true);
